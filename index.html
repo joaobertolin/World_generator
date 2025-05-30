@@ -6,9 +6,9 @@
     <title>Gerador de Mundo Fictício</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
@@ -17,96 +17,85 @@
             color: #fff;
             min-height: 100vh;
             padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         header {
             text-align: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            max-width: 800px;
         }
         
         h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         
         .subtitle {
             font-size: 1.2rem;
-            opacity: 0.8;
+            margin-bottom: 20px;
+            color: #b0c4de;
+            max-width: 600px;
         }
         
-        .content {
+        .container {
             display: flex;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 20px;
+            justify-content: center;
+            max-width: 1200px;
         }
         
         .controls {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(0, 20, 40, 0.7);
-            border-radius: 15px;
-            padding: 25px;
+            background: rgba(25, 35, 70, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            width: 300px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 150, 255, 0.3);
-        }
-        
-        .world-display {
-            flex: 2;
-            min-width: 500px;
-            background: rgba(0, 10, 30, 0.8);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .control-group {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(100, 180, 255, 0.2);
+            margin-bottom: 20px;
         }
         
         .control-group h3 {
+            font-size: 1.2rem;
             margin-bottom: 15px;
+            color: #64b5f6;
             display: flex;
             align-items: center;
-            color: #4fc3f7;
         }
         
         .control-group h3 i {
             margin-right: 10px;
-            font-size: 1.2rem;
         }
         
         .slider-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         
-        .slider-container label {
-            min-width: 200px;
-            font-size: 1.1rem;
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e0e0e0;
         }
         
         input[type="range"] {
-            flex: 1;
+            width: 100%;
             height: 8px;
-            background: rgba(100, 180, 255, 0.2);
+            background: linear-gradient(to right, #1e3c72, #2a5298);
             border-radius: 4px;
             outline: none;
-            margin: 0 15px;
             -webkit-appearance: none;
         }
         
@@ -114,294 +103,297 @@
             -webkit-appearance: none;
             width: 20px;
             height: 20px;
-            background: #4fc3f7;
             border-radius: 50%;
+            background: #4facfe;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(79, 195, 247, 0.8);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         
         .value-display {
-            min-width: 50px;
             text-align: center;
+            font-size: 1.1rem;
             font-weight: bold;
-            background: rgba(0, 60, 120, 0.5);
-            padding: 5px 10px;
-            border-radius: 5px;
+            color: #4facfe;
+            margin-top: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px;
+            border-radius: 6px;
         }
         
-        .world-map {
-            width: 100%;
-            height: 500px;
-            background: #0a192f;
-            border-radius: 10px;
+        .world-canvas-container {
             position: relative;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(100, 180, 255, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
         
-        .tectonic-plate {
+        canvas {
+            display: block;
+            background: #0a192f;
+        }
+        
+        .legend {
             position: absolute;
-            border: 2px solid;
-            opacity: 0.7;
-            border-radius: 50%;
-            transform-origin: center;
-            animation: float 20s infinite ease-in-out;
-            mix-blend-mode: lighten;
-        }
-        
-        .continent {
-            position: absolute;
-            background: linear-gradient(135deg, #388e3c, #8bc34a);
-            border: 2px solid #2e7d32;
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            animation: pulse 10s infinite alternate;
-        }
-        
-        .island {
-            position: absolute;
-            background: linear-gradient(135deg, #43a047, #7cb342);
-            border: 1px solid #2e7d32;
-            border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-        }
-        
-        .ocean {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #0288d1, #01579b);
-            z-index: -1;
-        }
-        
-        .ice {
-            position: absolute;
-            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-            border: 1px solid #b2dfdb;
-            border-radius: 10px;
-            z-index: 10;
-        }
-        
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 25px;
-            width: 100%;
-        }
-        
-        .stat-card {
-            flex: 1;
-            min-width: 150px;
-            background: rgba(0, 40, 80, 0.6);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .stat-card h4 {
-            color: #4fc3f7;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-        
-        .stat-card p {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #a5d6a7;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            width: 100%;
-        }
-        
-        button {
-            flex: 1;
-            padding: 15px;
-            font-size: 1.1rem;
-            border: none;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #0288d1, #01579b);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            letter-spacing: 1px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
         }
         
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(135deg, #039be5, #0288d1);
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
         }
         
         .generate-btn {
-            background: linear-gradient(135deg, #43a047, #2e7d32);
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
         }
         
         .generate-btn:hover {
-            background: linear-gradient(135deg, #4caf50, #388e3c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
         }
         
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0); }
-            25% { transform: translate(5px, 5px) rotate(1deg); }
-            50% { transform: translate(-5px, -5px) rotate(-1deg); }
-            75% { transform: translate(3px, -3px) rotate(2deg); }
+        .generate-btn:active {
+            transform: translateY(1px);
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.02); }
+        .info-panel {
+            background: rgba(25, 35, 70, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        @media (max-width: 900px) {
-            .content {
+        .info-panel h2 {
+            color: #64b5f6;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .world-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: rgba(0, 20, 40, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #4facfe;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .stat-card p {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #00f2fe;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
                 flex-direction: column;
+                align-items: center;
             }
             
-            .world-display {
-                min-width: 100%;
+            .controls {
+                width: 100%;
+                max-width: 500px;
             }
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>🌍 Gerador de Mundo Fictício</h1>
+        <p class="subtitle">Crie mundos únicos a cada reinício da página. Ajuste os parâmetros abaixo e clique em "Gerar Mundo" para criar um novo planeta!</p>
+    </header>
+    
     <div class="container">
-        <header>
-            <h1>🌎 Gerador de Mundo Fictício</h1>
-            <p class="subtitle">Crie um mundo único a cada recarregamento de página com configurações personalizadas</p>
-        </header>
-        
-        <div class="content">
-            <div class="controls">
-                <div class="control-group">
-                    <h3><i>🌋</i> Placas Tectônicas</h3>
-                    <div class="slider-container">
-                        <label>Quantidade (1-30):</label>
-                        <input type="range" id="tectonic-plates" min="1" max="30" value="12">
-                        <div class="value-display" id="tectonic-value">12</div>
-                    </div>
+        <div class="controls">
+            <div class="control-group">
+                <h3>⚙️ Configurações do Mundo</h3>
+                
+                <div class="slider-container">
+                    <label for="plates">Placas Tectônicas (1-30)</label>
+                    <input type="range" id="plates" min="1" max="30" value="12">
+                    <div class="value-display" id="plates-value">12</div>
                 </div>
                 
-                <div class="control-group">
-                    <h3><i>🗾</i> Continentes</h3>
-                    <div class="slider-container">
-                        <label>Quantidade (1-10):</label>
-                        <input type="range" id="continents" min="1" max="10" value="5">
-                        <div class="value-display" id="continent-value">5</div>
-                    </div>
+                <div class="slider-container">
+                    <label for="continents">Continentes (1-10)</label>
+                    <input type="range" id="continents" min="1" max="10" value="6">
+                    <div class="value-display" id="continents-value">6</div>
                 </div>
                 
-                <div class="control-group">
-                    <h3><i>🏝️</i> Ilhas</h3>
-                    <div class="slider-container">
-                        <label>Quantidade (1-1000):</label>
-                        <input type="range" id="islands" min="1" max="1000" value="150">
-                        <div class="value-display" id="island-value">150</div>
-                    </div>
+                <div class="slider-container">
+                    <label for="islands">Ilhas (1-1000)</label>
+                    <input type="range" id="islands" min="1" max="1000" value="250">
+                    <div class="value-display" id="islands-value">250</div>
                 </div>
                 
-                <div class="control-group">
-                    <h3><i>💧</i> Água</h3>
-                    <div class="slider-container">
-                        <label>Quantia (40%-90%):</label>
-                        <input type="range" id="water" min="40" max="90" value="70">
-                        <div class="value-display" id="water-value">70%</div>
-                    </div>
+                <div class="slider-container">
+                    <label for="water">Água (40%-90%)</label>
+                    <input type="range" id="water" min="40" max="90" value="70">
+                    <div class="value-display" id="water-value">70%</div>
                 </div>
                 
-                <div class="control-group">
-                    <h3><i>❄️</i> Gelo</h3>
-                    <div class="slider-container">
-                        <label>Quantia (1%-30%):</label>
-                        <input type="range" id="ice" min="1" max="30" value="15">
-                        <div class="value-display" id="ice-value">15%</div>
-                    </div>
-                </div>
-                
-                <div class="actions">
-                    <button class="generate-btn" id="generate">Gerar Mundo</button>
-                    <button id="random">Configurações Aleatórias</button>
+                <div class="slider-container">
+                    <label for="ice">Gelo (1%-30%)</label>
+                    <input type="range" id="ice" min="1" max="30" value="15">
+                    <div class="value-display" id="ice-value">15%</div>
                 </div>
             </div>
             
-            <div class="world-display">
-                <div class="world-map" id="world-map">
-                    <div class="ocean"></div>
-                    <!-- Elementos gerados pelo JavaScript -->
+            <button id="generate" class="generate-btn">Gerar Novo Mundo</button>
+        </div>
+        
+        <div class="world-canvas-container">
+            <canvas id="worldCanvas" width="700" height="500"></canvas>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="color-box" style="background-color: #1e3c72;"></div>
+                    <span>Água Profunda</span>
                 </div>
-                
-                <div class="stats">
-                    <div class="stat-card">
-                        <h4>Placas Tectônicas</h4>
-                        <p id="stat-plates">12</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Continentes</h4>
-                        <p id="stat-continents">5</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Ilhas</h4>
-                        <p id="stat-islands">150</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Água</h4>
-                        <p id="stat-water">70%</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Gelo</h4>
-                        <p id="stat-ice">15%</p>
-                    </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background-color: #2a5298;"></div>
+                    <span>Água</span>
                 </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background-color: #4CAF50;"></div>
+                    <span>Terra</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background-color: #8B4513;"></div>
+                    <span>Montanhas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background-color: #E0FFFF;"></div>
+                    <span>Gelo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info-panel">
+        <h2>📊 Estatísticas do Mundo Gerado</h2>
+        <div class="world-stats">
+            <div class="stat-card">
+                <h3>Placas Tectônicas</h3>
+                <p id="plates-stat">12</p>
+            </div>
+            <div class="stat-card">
+                <h3>Continentes</h3>
+                <p id="continents-stat">6</p>
+            </div>
+            <div class="stat-card">
+                <h3>Ilhas</h3>
+                <p id="islands-stat">250</p>
+            </div>
+            <div class="stat-card">
+                <h3>Cobertura de Água</h3>
+                <p id="water-stat">70%</p>
+            </div>
+            <div class="stat-card">
+                <h3>Cobertura de Gelo</h3>
+                <p id="ice-stat">15%</p>
             </div>
         </div>
     </div>
 
     <script>
         // Elementos DOM
-        const worldMap = document.getElementById('world-map');
+        const canvas = document.getElementById('worldCanvas');
+        const ctx = canvas.getContext('2d');
         const generateBtn = document.getElementById('generate');
-        const randomBtn = document.getElementById('random');
         
-        // Sliders e valores
-        const tectonicSlider = document.getElementById('tectonic-plates');
-        const continentSlider = document.getElementById('continents');
-        const islandSlider = document.getElementById('islands');
+        // Sliders
+        const platesSlider = document.getElementById('plates');
+        const continentsSlider = document.getElementById('continents');
+        const islandsSlider = document.getElementById('islands');
         const waterSlider = document.getElementById('water');
         const iceSlider = document.getElementById('ice');
         
-        const tectonicValue = document.getElementById('tectonic-value');
-        const continentValue = document.getElementById('continent-value');
-        const islandValue = document.getElementById('island-value');
+        // Valores exibidos
+        const platesValue = document.getElementById('plates-value');
+        const continentsValue = document.getElementById('continents-value');
+        const islandsValue = document.getElementById('islands-value');
         const waterValue = document.getElementById('water-value');
         const iceValue = document.getElementById('ice-value');
         
-        // Elementos de estatísticas
-        const statPlates = document.getElementById('stat-plates');
-        const statContinents = document.getElementById('stat-continents');
-        const statIslands = document.getElementById('stat-islands');
-        const statWater = document.getElementById('stat-water');
-        const statIce = document.getElementById('stat-ice');
+        // Estatísticas
+        const platesStat = document.getElementById('plates-stat');
+        const continentsStat = document.getElementById('continents-stat');
+        const islandsStat = document.getElementById('islands-stat');
+        const waterStat = document.getElementById('water-stat');
+        const iceStat = document.getElementById('ice-stat');
         
-        // Atualizar valores exibidos
-        tectonicSlider.addEventListener('input', () => {
-            tectonicValue.textContent = tectonicSlider.value;
+        // Atualizar valores exibidos dos sliders
+        function updateSliderValues() {
+            platesValue.textContent = platesSlider.value;
+            continentsValue.textContent = continentsSlider.value;
+            islandsValue.textContent = islandsSlider.value;
+            waterValue.textContent = waterSlider.value + '%';
+            iceValue.textContent = iceSlider.value + '%';
+        }
+        
+        // Atualizar estatísticas
+        function updateStats() {
+            platesStat.textContent = platesSlider.value;
+            continentsStat.textContent = continentsSlider.value;
+            islandsStat.textContent = islandsSlider.value;
+            waterStat.textContent = waterSlider.value + '%';
+            iceStat.textContent = iceSlider.value + '%';
+        }
+        
+        // Inicializar valores
+        updateSliderValues();
+        updateStats();
+        
+        // Event listeners para sliders
+        platesSlider.addEventListener('input', () => {
+            platesValue.textContent = platesSlider.value;
         });
         
-        continentSlider.addEventListener('input', () => {
-            continentValue.textContent = continentSlider.value;
+        continentsSlider.addEventListener('input', () => {
+            continentsValue.textContent = continentsSlider.value;
         });
         
-        islandSlider.addEventListener('input', () => {
-            islandValue.textContent = islandSlider.value;
+        islandsSlider.addEventListener('input', () => {
+            islandsValue.textContent = islandsSlider.value;
         });
         
         waterSlider.addEventListener('input', () => {
@@ -412,211 +404,313 @@
             iceValue.textContent = iceSlider.value + '%';
         });
         
-        // Gerar configurações aleatórias
-        randomBtn.addEventListener('click', () => {
-            tectonicSlider.value = Math.floor(Math.random() * 30) + 1;
-            continentSlider.value = Math.floor(Math.random() * 10) + 1;
-            islandSlider.value = Math.floor(Math.random() * 1000) + 1;
-            waterSlider.value = Math.floor(Math.random() * 51) + 40; // 40-90
-            iceSlider.value = Math.floor(Math.random() * 30) + 1; // 1-30
-            
-            // Atualizar exibição
-            tectonicValue.textContent = tectonicSlider.value;
-            continentValue.textContent = continentSlider.value;
-            islandValue.textContent = islandSlider.value;
-            waterValue.textContent = waterSlider.value + '%';
-            iceValue.textContent = iceSlider.value + '%';
-            
-            generateWorld();
-        });
-        
         // Gerar mundo
         generateBtn.addEventListener('click', generateWorld);
         
+        // Gerar número aleatório com semente
+        function seededRandom(seed) {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+        
+        // Gerar ponto aleatório com semente
+        function randomPoint(seed, width, height) {
+            return {
+                x: Math.floor(seededRandom(seed) * width),
+                y: Math.floor(seededRandom(seed + 1) * height)
+            };
+        }
+        
+        // Gerar cor aleatória com semente
+        function randomColor(seed) {
+            const r = Math.floor(seededRandom(seed) * 155 + 100;
+            const g = Math.floor(seededRandom(seed + 1) * 155 + 100;
+            const b = Math.floor(seededRandom(seed + 2) * 155 + 100;
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+        
         // Função para gerar o mundo
         function generateWorld() {
-            // Limpar o mundo atual
-            worldMap.innerHTML = '<div class="ocean"></div>';
-            
-            // Obter valores
-            const plates = parseInt(tectonicSlider.value);
-            const continents = parseInt(continentSlider.value);
-            const islands = parseInt(islandSlider.value);
-            const water = parseInt(waterSlider.value);
-            const ice = parseInt(iceSlider.value);
-            
             // Atualizar estatísticas
-            statPlates.textContent = plates;
-            statContinents.textContent = continents;
-            statIslands.textContent = islands;
-            statWater.textContent = water + '%';
-            statIce.textContent = ice + '%';
+            updateStats();
             
-            // Gerar placas tectônicas
-            generateTectonicPlates(plates);
+            // Limpar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Gerar continentes
-            generateContinents(continents);
+            // Obter valores dos sliders
+            const plates = parseInt(platesSlider.value);
+            const continents = parseInt(continentsSlider.value);
+            const islands = parseInt(islandsSlider.value);
+            const waterPercentage = parseInt(waterSlider.value);
+            const icePercentage = parseInt(iceSlider.value);
             
-            // Gerar ilhas
-            generateIslands(islands);
+            // Criar semente baseada na hora atual
+            const seed = new Date().getTime();
             
-            // Gerar gelo
-            generateIce(ice);
+            // 1. Gerar placas tectônicas
+            generateTectonicPlates(plates, seed);
+            
+            // 2. Gerar continentes
+            generateContinents(continents, seed);
+            
+            // 3. Gerar ilhas
+            generateIslands(islands, seed);
+            
+            // 4. Adicionar água
+            generateWater(waterPercentage, seed);
+            
+            // 5. Adicionar gelo
+            generateIce(icePercentage, seed);
+            
+            // Adicionar efeito de iluminação
+            addLightingEffect();
+            
+            // Adicionar borda decorativa
+            addDecorativeBorder();
         }
         
-        // Função para gerar placas tectônicas
-        function generateTectonicPlates(count) {
-            const colors = ['#ff5252', '#ff9800', '#ffeb3b', '#4caf50', '#2196f3', '#9c27b0'];
+        // Gerar placas tectônicas
+        function generateTectonicPlates(platesCount, seed) {
+            const width = canvas.width;
+            const height = canvas.height;
             
-            for (let i = 0; i < count; i++) {
-                const plate = document.createElement('div');
-                plate.className = 'tectonic-plate';
-                
-                // Tamanho e posição aleatórios
-                const size = Math.random() * 200 + 100;
-                const x = Math.random() * (worldMap.offsetWidth - size);
-                const y = Math.random() * (worldMap.offsetHeight - size);
-                
-                // Estilo
-                plate.style.width = `${size}px`;
-                plate.style.height = `${size}px`;
-                plate.style.left = `${x}px`;
-                plate.style.top = `${y}px`;
-                
-                // Cor aleatória com transparência
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                plate.style.borderColor = color;
-                plate.style.boxShadow = `0 0 30px ${color}`;
-                
-                // Animação
-                plate.style.animationDuration = `${Math.random() * 20 + 10}s`;
-                
-                worldMap.appendChild(plate);
+            // Gerar pontos centrais para as placas
+            const centers = [];
+            for (let i = 0; i < platesCount; i++) {
+                centers.push(randomPoint(seed + i, width, height));
+            }
+            
+            // Desenhar placas
+            for (let y = 0; y < height; y += 8) {
+                for (let x = 0; x < width; x += 8) {
+                    let minDist = Infinity;
+                    let closestPlate = 0;
+                    
+                    // Encontrar a placa mais próxima
+                    for (let i = 0; i < platesCount; i++) {
+                        const dx = centers[i].x - x;
+                        const dy = centers[i].y - y;
+                        const dist = dx * dx + dy * dy;
+                        
+                        if (dist < minDist) {
+                            minDist = dist;
+                            closestPlate = i;
+                        }
+                    }
+                    
+                    // Definir cor baseada na placa
+                    const color = randomColor(seed + closestPlate);
+                    ctx.fillStyle = color;
+                    
+                    // Desenhar bordas entre placas
+                    if (minDist < 15000) {
+                        ctx.globalAlpha = 0.4;
+                        ctx.fillRect(x, y, 8, 8);
+                        ctx.globalAlpha = 1.0;
+                        
+                        // Desenhar bordas
+                        if (minDist > 5000 && minDist < 8000) {
+                            ctx.fillStyle = '#8B4513';
+                            ctx.fillRect(x, y, 2, 8);
+                            ctx.fillRect(x, y, 8, 2);
+                        }
+                    }
+                }
             }
         }
         
-        // Função para gerar continentes
-        function generateContinents(count) {
-            for (let i = 0; i < count; i++) {
-                const continent = document.createElement('div');
-                continent.className = 'continent';
+        // Gerar continentes
+        function generateContinents(continentsCount, seed) {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            for (let i = 0; i < continentsCount; i++) {
+                // Posição central do continente
+                const centerX = Math.floor(seededRandom(seed + i) * width);
+                const centerY = Math.floor(seededRandom(seed + i + 1) * height);
                 
-                // Tamanho e posição aleatórios
-                const width = Math.random() * 200 + 150;
-                const height = Math.random() * 150 + 100;
-                const x = Math.random() * (worldMap.offsetWidth - width);
-                const y = Math.random() * (worldMap.offsetHeight - height);
+                // Tamanho do continente
+                const size = 50 + Math.floor(seededRandom(seed + i + 2) * 150);
                 
-                // Estilo
-                continent.style.width = `${width}px`;
-                continent.style.height = `${height}px`;
-                continent.style.left = `${x}px`;
-                continent.style.top = `${y}px`;
+                // Cor do continente
+                const color = `rgb(${Math.floor(30 + seededRandom(seed + i + 3) * 40)}, 
+                                ${Math.floor(120 + seededRandom(seed + i + 4) * 60)}, 
+                                ${Math.floor(30 + seededRandom(seed + i + 5) * 40)})`;
                 
-                // Forma única
-                continent.style.borderRadius = generateRandomShape();
+                ctx.fillStyle = color;
                 
-                worldMap.appendChild(continent);
+                // Desenhar forma orgânica para o continente
+                for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 20) {
+                    const radius = size * (0.7 + seededRandom(seed + i + angle) * 0.6);
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+                    
+                    // Desenhar círculos para formar continente
+                    ctx.beginPath();
+                    ctx.arc(x, y, size * 0.2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Adicionar montanhas
+                    if (seededRandom(seed + i + angle) > 0.7) {
+                        ctx.fillStyle = '#8B4513';
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x - 15, y + 25);
+                        ctx.lineTo(x + 15, y + 25);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.fillStyle = color;
+                    }
+                }
             }
         }
         
-        // Função para gerar ilhas
-        function generateIslands(count) {
-            for (let i = 0; i < count; i++) {
-                const island = document.createElement('div');
-                island.className = 'island';
+        // Gerar ilhas
+        function generateIslands(islandsCount, seed) {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            for (let i = 0; i < islandsCount; i++) {
+                // Posição da ilha
+                const x = Math.floor(seededRandom(seed + i) * width);
+                const y = Math.floor(seededRandom(seed + i + 1) * height);
                 
-                // Tamanho e posição aleatórios
-                const size = Math.random() * 40 + 10;
-                const x = Math.random() * (worldMap.offsetWidth - size);
-                const y = Math.random() * (worldMap.offsetHeight - size);
+                // Tamanho da ilha
+                const size = 5 + Math.floor(seededRandom(seed + i + 2) * 15);
                 
-                // Estilo
-                island.style.width = `${size}px`;
-                island.style.height = `${size}px`;
-                island.style.left = `${x}px`;
-                island.style.top = `${y}px`;
+                // Cor da ilha (verde mais claro que os continentes)
+                ctx.fillStyle = `rgb(${Math.floor(40 + seededRandom(seed + i + 3) * 60)}, 
+                                   ${Math.floor(150 + seededRandom(seed + i + 4) * 40)}, 
+                                   ${Math.floor(40 + seededRandom(seed + i + 5) * 40)})`;
                 
-                // Adicionar um pouco de variação à forma
-                const shape = Math.random();
-                if (shape < 0.3) {
-                    island.style.borderRadius = '30% 70% 70% 30% / 30% 30% 70% 70%';
-                } else if (shape < 0.6) {
-                    island.style.borderRadius = '60% 40% 40% 60% / 60% 30% 70% 40%';
+                // Desenhar ilha
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Adicionar pequenas palmeiras para algumas ilhas
+                if (size > 10 && seededRandom(seed + i) > 0.8) {
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(x - 2, y, 4, 15);
+                    
+                    ctx.fillStyle = '#4CAF50';
+                    ctx.beginPath();
+                    ctx.arc(x, y - 5, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+        
+        // Gerar água
+        function generateWater(waterPercentage, seed) {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Criar gradiente para a água
+            const waterGradient = ctx.createLinearGradient(0, 0, 0, height);
+            waterGradient.addColorStop(0, '#1e3c72');
+            waterGradient.addColorStop(1, '#2a5298');
+            
+            // Desenhar água com transparência
+            ctx.globalAlpha = waterPercentage / 100;
+            ctx.fillStyle = waterGradient;
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalAlpha = 1.0;
+            
+            // Adicionar ondas
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < 100; i++) {
+                const y = Math.floor(seededRandom(seed + i) * height);
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                
+                for (let x = 0; x < width; x += 20) {
+                    const waveHeight = 3 * Math.sin(x / 30 + seededRandom(seed + i) * 2);
+                    ctx.lineTo(x, y + waveHeight);
                 }
                 
-                worldMap.appendChild(island);
+                ctx.stroke();
             }
         }
         
-        // Função para gerar gelo
-        function generateIce(percentage) {
-            // Calcular área total de gelo
-            const totalArea = worldMap.offsetWidth * worldMap.offsetHeight;
-            const iceArea = totalArea * (percentage / 100);
+        // Gerar gelo
+        function generateIce(icePercentage, seed) {
+            const width = canvas.width;
+            const height = canvas.height;
             
-            // Criar camadas de gelo (principalmente nos polos)
-            const polarIce = document.createElement('div');
-            polarIce.className = 'ice';
+            // Calcular altura das calotas polares baseada na porcentagem
+            const iceHeight = Math.floor((icePercentage / 100) * height * 0.4);
             
-            // Tamanho e posição - principalmente na parte superior e inferior
-            const height = iceArea / worldMap.offsetWidth / 2;
+            // Calota polar norte
+            const northIce = ctx.createLinearGradient(0, 0, 0, iceHeight);
+            northIce.addColorStop(0, '#E0FFFF');
+            northIce.addColorStop(1, '#ADD8E6');
             
-            // Gelo do polo norte
-            const northIce = polarIce.cloneNode();
-            northIce.style.width = '100%';
-            northIce.style.height = `${height}px`;
-            northIce.style.top = '0';
-            northIce.style.left = '0';
-            northIce.style.borderRadius = '0 0 50% 50%';
-            worldMap.appendChild(northIce);
+            ctx.fillStyle = northIce;
+            ctx.fillRect(0, 0, width, iceHeight);
             
-            // Gelo do polo sul
-            const southIce = polarIce.cloneNode();
-            southIce.style.width = '100%';
-            southIce.style.height = `${height}px`;
-            southIce.style.bottom = '0';
-            southIce.style.top = 'auto';
-            southIce.style.left = '0';
-            southIce.style.borderRadius = '50% 50% 0 0';
-            worldMap.appendChild(southIce);
+            // Calota polar sul
+            const southIce = ctx.createLinearGradient(0, height - iceHeight, 0, height);
+            southIce.addColorStop(0, '#ADD8E6');
+            southIce.addColorStop(1, '#E0FFFF');
             
-            // Adicionar algumas pequenas calotas de gelo em terra
-            const icePatches = Math.floor(Math.random() * 10) + 5;
-            for (let i = 0; i < icePatches; i++) {
-                const icePatch = document.createElement('div');
-                icePatch.className = 'ice';
+            ctx.fillStyle = southIce;
+            ctx.fillRect(0, height - iceHeight, width, iceHeight);
+            
+            // Adicionar textura de gelo
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < 50; i++) {
+                const y = Math.floor(seededRandom(seed + i) * iceHeight);
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
                 
-                const size = Math.random() * 60 + 20;
-                const x = Math.random() * (worldMap.offsetWidth - size);
-                const y = Math.random() * (worldMap.offsetHeight - size);
-                
-                icePatch.style.width = `${size}px`;
-                icePatch.style.height = `${size}px`;
-                icePatch.style.left = `${x}px`;
-                icePatch.style.top = `${y}px`;
-                icePatch.style.borderRadius = '50%';
-                
-                worldMap.appendChild(icePatch);
+                const ySouth = height - Math.floor(seededRandom(seed + i + 100) * iceHeight);
+                ctx.beginPath();
+                ctx.moveTo(0, ySouth);
+                ctx.lineTo(width, ySouth);
+                ctx.stroke();
             }
         }
         
-        // Função para gerar formas aleatórias
-        function generateRandomShape() {
-            const shapes = [
-                '30% 70% 70% 30% / 30% 30% 70% 70%',
-                '60% 40% 40% 60% / 60% 30% 70% 40%',
-                '50% 50% 50% 50% / 60% 40% 60% 40%',
-                '40% 60% 40% 60% / 70% 50% 50% 30%',
-                '70% 30% 50% 50% / 40% 60% 40% 60%'
-            ];
+        // Adicionar efeito de iluminação
+        function addLightingEffect() {
+            const width = canvas.width;
+            const height = canvas.height;
             
-            return shapes[Math.floor(Math.random() * shapes.length)];
+            // Criar gradiente radial para efeito de iluminação
+            const lighting = ctx.createRadialGradient(
+                width * 0.7, height * 0.3, 10,
+                width * 0.7, height * 0.3, width * 0.8
+            );
+            lighting.addColorStop(0, 'rgba(255, 255, 200, 0.3)');
+            lighting.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            
+            ctx.fillStyle = lighting;
+            ctx.fillRect(0, 0, width, height);
         }
         
-        // Gerar mundo ao carregar a página
-        window.addEventListener('load', generateWorld);
+        // Adicionar borda decorativa
+        function addDecorativeBorder() {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(2, 2, width - 4, height - 4);
+            
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(4, 4, width - 8, height - 8);
+        }
+        
+        // Gerar mundo inicial
+        generateWorld();
     </script>
 </body>
 </html>
